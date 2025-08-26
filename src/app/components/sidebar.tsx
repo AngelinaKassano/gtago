@@ -46,12 +46,22 @@ export default function Sidebar() {
   Object.keys(userTags).forEach(tag => {
     if (recommendations[tag] && recommended.length < 4) {
       recommendations[tag].slice(0, 2).forEach(title => {
-        if (recommended.length < 4) {
+        if (recommended.length < 4 && !recommended.includes(title)) {
           recommended.push(title);
         }
       });
     }
   });
+
+  // Добавляем дефолтные рекомендации, если недостаточно
+  if (recommended.length < 4) {
+    const defaults = ['Baldur\'s Gate 3', 'Red Dead Redemption 2', 'Cyberpunk 2077', 'Hollow Knight: Silksong'];
+    defaults.forEach(title => {
+      if (recommended.length < 4 && !recommended.includes(title)) {
+        recommended.push(title);
+      }
+    });
+  }
 
   return (
     <aside className="space-y-6">
@@ -136,6 +146,46 @@ export default function Sidebar() {
         </p>
       </div>
 
+      {/* === 💡 Вам может понравиться === */}
+      <div className="card bg-bg-card rounded-2xl p-6 border border-border">
+        <h4 className="text-lg font-semibold mb-4">💡 Вам может понравиться</h4>
+        <ul className="space-y-3">
+          {recommended.length > 0 ? (
+            recommended.map((title, i) => (
+              <li key={i}>
+                <a href="#" className="text-muted-foreground hover:text-accent block transition">
+                  {title}
+                </a>
+              </li>
+            ))
+          ) : (
+            <li>
+              <a href="/news" className="text-muted-foreground hover:text-accent block transition">
+                Начните читать — мы подберём!
+              </a>
+            </li>
+          )}
+        </ul>
+      </div>
+
+      {/* === 🕒 Недавно просмотренные === */}
+      <div className="card bg-bg-card rounded-2xl p-6 border border-border">
+        <h4 className="text-lg font-semibold mb-4">🕒 Недавно просмотренные</h4>
+        <ul className="space-y-3">
+          {recentlyViewed.length > 0 ? (
+            recentlyViewed.map((item, i) => (
+              <li key={i}>
+                <Link href={item.url} className="text-muted-foreground hover:text-accent block transition">
+                  {item.title}
+                </Link>
+              </li>
+            ))
+          ) : (
+            <li className="text-muted-foreground text-sm">Пока ничего не просмотрено</li>
+          )}
+        </ul>
+      </div>
+
       {/* === 🎮 Раздачи игр Steam === */}
       <div className="card bg-bg-card rounded-2xl p-6 border border-border">
         <h4 className="text-lg font-semibold mb-4">🎮 Раздачи игр Steam</h4>
@@ -199,6 +249,114 @@ export default function Sidebar() {
           </li>
         </ul>
       </div>
+
+      {/* Адаптивные стили */}
+      <style jsx>{`
+        @media (max-width: 1024px) {
+          .card {
+            padding: 1rem;
+          }
+          
+          .tags {
+            gap: 0.5rem;
+          }
+          
+          .tag {
+            padding: 0.2rem 0.6rem;
+            font-size: 0.75rem;
+          }
+          
+          h4 {
+            font-size: 1rem;
+          }
+          
+          ul.space-y-3 > li {
+            margin-top: 0.5rem;
+          }
+          
+          .ai-block {
+            padding: 1rem;
+          }
+          
+          .ai-header {
+            margin-bottom: 0.5rem;
+          }
+          
+          .text-sm {
+            font-size: 0.8rem;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .card {
+            padding: 0.8rem;
+          }
+          
+          .tags {
+            gap: 0.4rem;
+          }
+          
+          .tag {
+            padding: 0.15rem 0.5rem;
+            font-size: 0.7rem;
+          }
+          
+          h4 {
+            font-size: 0.9rem;
+          }
+          
+          ul.space-y-3 > li {
+            margin-top: 0.4rem;
+          }
+          
+          .ai-block {
+            padding: 0.8rem;
+          }
+          
+          .text-sm {
+            font-size: 0.75rem;
+          }
+          
+          .text-xs {
+            font-size: 0.7rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .card {
+            padding: 0.6rem;
+          }
+          
+          .tags {
+            gap: 0.3rem;
+          }
+          
+          .tag {
+            padding: 0.1rem 0.4rem;
+            font-size: 0.65rem;
+          }
+          
+          h4 {
+            font-size: 0.85rem;
+          }
+          
+          ul.space-y-3 > li {
+            margin-top: 0.3rem;
+          }
+          
+          .ai-block {
+            padding: 0.6rem;
+          }
+          
+          .text-sm {
+            font-size: 0.7rem;
+          }
+          
+          .text-xs {
+            font-size: 0.65rem;
+          }
+        }
+      `}</style>
     </aside>
   );
 }

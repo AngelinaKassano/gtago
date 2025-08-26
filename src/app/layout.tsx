@@ -13,9 +13,9 @@ export default function RootLayout({
     <html lang="ru" suppressHydrationWarning>
       <body>
         <ThemeProvider>
-          {/* === Фон с частицами === */}
-          
-          
+          {/* === Игровой фон с частицами === */}
+          <div className="game-bg"></div>
+          <div className="overlay"></div>
           
           {/* === Динамические частицы === */}
           <script
@@ -25,6 +25,7 @@ export default function RootLayout({
                   const container = document.querySelector('.game-bg');
                   if (!container) return;
 
+                  // Создаём 20 частиц
                   for (let i = 0; i < 20; i++) {
                     const p = document.createElement('div');
                     p.className = 'particle';
@@ -34,6 +35,7 @@ export default function RootLayout({
                     p.style.height = Math.random() * 3 + 'px';
                     p.style.opacity = Math.random() * 0.7 + 0.3;
                     p.style.animationDelay = Math.random() * 3 + 's';
+                    p.style.backgroundColor = '#a855f7';
                     container.appendChild(p);
                   }
                 });

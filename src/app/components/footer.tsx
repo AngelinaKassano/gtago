@@ -3,8 +3,9 @@
 
 import Link from 'next/link';
 import { FaBeer } from 'react-icons/fa';
-import { PiTelegramLogo } from "react-icons/pi";
+import { LiaTelegram } from "react-icons/lia";
 import { SiVk } from "react-icons/si";
+import { SiBoosty } from "react-icons/si";
 
 export default function Footer() {
   // 🟩 Функция для создания эффекта вспышки
@@ -43,13 +44,22 @@ export default function Footer() {
             >
               Условия использования
             </Link>
+            {/* ✅ Добавлена ссылка на RSS */}
+            <Link 
+              href="/rss.xml" 
+              className="hover:text-accent transition"
+              onClick={handleClickEffect}
+            >
+              📡 RSS-лента
+            </Link>
           </div>
 
           {/* Социальные сети */}
           <div className="flex space-x-4 mt-6">
             {[
-              { href: 'https://t.me/gtago', label: 'Telegram', icon: <PiTelegramLogo /> },
+              { href: 'https://t.me/gtago', label: 'Telegram', icon: <LiaTelegram /> },
               { href: 'https://vk.com/gtago', label: 'ВКонтакте', icon: <SiVk /> },
+              { href: 'https://boosty.to/gtago', label: 'Boosty', icon: <SiBoosty /> },
             ].map((social) => (
               <Link
                 key={social.href}
