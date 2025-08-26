@@ -1,0 +1,293 @@
+/* src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0f0f11;          /* ✅ Ещё темнее */
+  --bg-card: #141418;     /* ✅ Темнее карточки */
+  --text: #e0e0e0;
+  --text-muted: #9ca3af;
+  --accent: #a855f7;
+  --accent-hover: #c084fc;
+  --border: #2a2a30;      /* ✅ Темнее границы */
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.35);  /* ✅ Глубже тени */
+  --shadow-hover: 0 12px 40px rgba(168, 85, 247, 0.3);
+  --gradient-accent: linear-gradient(90deg, #a855f7, #6366f1);
+}
+
+.light-theme {
+  --bg: #ffffff;
+  --bg-card: #f8f9fa;
+  --text: #111827;
+  --text-muted: #4b5563;
+  --border: #e5e7eb;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.7;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* === Игровой фон === */
+.game-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: -2;
+  background: 
+    radial-gradient(circle at 15% 50%, rgba(168, 85, 247, 0.03), transparent 30%),  /* ✅ Слабее свет */
+    radial-gradient(circle at 85% 20%, rgba(59, 130, 246, 0.03), transparent 30%);
+  background-size: 40px 40px;
+  opacity: 0.2;  /* ✅ Меньше помех */
+}
+
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(15, 15, 17, 0.9), rgba(5, 5, 7, 0.98));  /* ✅ Глубже градиент */
+  z-index: -1;
+}
+
+/* === Анимация вспышки === */
+.click-effect {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: flash 0.6s ease-out forwards;
+}
+
+@keyframes flash {
+  0% { width: 10px; height: 10px; opacity: 1; }
+  100% { width: 100px; height: 100px; opacity: 0; }
+}
+
+/* === Дрожание тега === */
+@keyframes wobble {
+  0%, 100% { transform: scale(1.1) rotate(0deg); }
+  25% { transform: scale(1.12) rotate(-1deg); }
+  75% { transform: scale(1.12) rotate(1deg); }
+}
+
+.tag:hover {
+  animation: wobble 0.6s ease-in-out;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* === Карточки === */
+.card {
+  background: var(--bg-card);
+  border-radius: 18px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* === Новостной блок === */
+.news-flex {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.news-img {
+  width: 218px;
+  height: 124px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);  /* ✅ Глубже тень */
+  flex-shrink: 0;
+}
+
+.news-title a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.news-title a:hover {
+  color: var(--accent);
+}
+
+.news-meta {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.8rem;
+}
+
+.news-excerpt {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.link-list a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin: 0.4rem 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.link-list a:hover {
+  color: var(--accent-hover);
+  background: rgba(168, 85, 247, 0.1);
+  transform: translateX(4px);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.15);
+}
+
+.ai-block {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.05), rgba(20, 20, 25, 0.5));  /* ✅ Темнее градиент */
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.08);
+}
+
+.ai-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ai-header::before {
+  content: '🤖';
+  font-size: 1.2rem;
+}
+
+footer {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border);
+  margin-top: 4rem;
+}
+
+/* === Мобильные стили === */
+@media (max-width: 768px) {
+  .news-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .news-img {
+    width: 100%;
+    max-width: 218px;
+    height: auto;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .tag {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .news-title {
+    font-size: 1.2rem;
+  }
+
+  .news-meta {
+    font-size: 0.8rem;
+  }
+
+  .news-excerpt {
+    font-size: 0.9rem;
+  }
+
+  .link-list a {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .ai-block {
+    padding: 1rem;
+  }
+
+  .ai-header {
+    font-size: 1rem;
+  }
+
+  .ai-header::before {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-flex {
+    gap: 0.8rem;
+  }
+
+  .card {
+    padding: 0.8rem;
+  }
+
+  .tag {
+    padding: 0.15rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .news-title {
+    font-size: 1.1rem;
+  }
+
+  .news-meta {
+    font-size: 0.8rem;
+  }
+
+  .news-excerpt {
+    font-size: 0.85rem;
+  }
+
+  .link-list a {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .ai-block {
+    padding: 0.8rem;
+  }
+
+  .ai-header {
+    font-size: 0.9rem;
+  }
+
+  .ai-header::before {
+    font-size: 0.9rem;
+  }
+}
