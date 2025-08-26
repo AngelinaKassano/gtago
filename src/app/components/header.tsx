@@ -15,6 +15,8 @@ export default function Header() {
     { href: '/guides', label: 'Гайды' },
     { href: '/videos', label: 'Видео' },
     { href: '/ratings', label: 'Рейтинги' },
+    { href: '/steam', label: 'Раздача Steam' },
+    { href: '/epic', label: 'Раздача Epic' },
     { href: '/advertising', label: 'Реклама' },
     { href: '/support', label: 'Поддержать' },
   ];
@@ -44,7 +46,7 @@ export default function Header() {
         ))}
       </nav>
 
-      {/* Поиск и тема */}
+      {/* Поиск и тема для десктопа */}
       <div className="hidden md:flex items-center gap-4">
         <SearchBar />
         <ThemeToggle />
@@ -62,26 +64,26 @@ export default function Header() {
         </button>
       </div>
 
-    {/* Мобильное меню в стиле сайта */}
-{isMenuOpen && (
-  <div className="md:hidden fixed inset-0 top-16 bg-bg z-40 flex flex-col p-4 space-y-4 border-t border-border animate-slide-down">
-    <div className="bg-bg-card rounded-2xl p-4 border border-border">
-      <SearchBar />
-    </div>
-    <nav className="bg-bg-card rounded-2xl p-4 border border-border space-y-2">
-      {navLinks.map((link) => (
-        <Link 
-          key={link.href} 
-          href={link.href}
-          className="block text-muted-foreground hover:text-accent py-3 px-4 rounded-lg transition"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          {link.label}
-        </Link>
-      ))}
-    </nav>
-  </div>
-)}
+      {/* Мобильное меню с цветным фоном */}
+      {isMenuOpen && (
+        <div className="md:hidden fixed inset-0 top-16 bg-bg z-40 flex flex-col p-4 space-y-4 border-t border-border animate-slide-down">
+          <div className="bg-bg-card rounded-2xl p-4 border border-border mb-4">
+            <SearchBar />
+          </div>
+          <nav className="bg-bg-card rounded-2xl p-4 border border-border space-y-2">
+            {navLinks.map((link) => (
+              <Link 
+                key={link.href} 
+                href={link.href}
+                className="block text-muted-foreground hover:text-accent py-3 px-4 rounded-lg transition"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes slide-down {

@@ -4,129 +4,70 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-// Типы
-type RecentlyViewed = { title: string; url: string; tags?: string[] };
-type TagViews = Record<string, number>;
+type RecentlyViewed = { title: string; url: string };
+type UserTags = Record<string, number>;
 
-// Рекомендации по тегам
 const recommendations: Record<string, string[]> = {
   'стратегия': ['Baldur\'s Gate 3', 'Cities: Skylines 2'],
   'экшен': ['GTA 6', 'Cyberpunk 2077'],
-  'метроидвания': ['Hollow Knight: Silksong', 'Ori and the Will of the Wisps'],
-  'RPG': ['The Witcher 3', 'Elden Ring'],
-  'киберпанк': ['Cyberpunk 2077', 'Neuromancer'],
-  'открытый мир': ['Red Dead Redemption 2', 'GTA 6'],
-  'постапокалипсис': ['Frostpunk 2', 'The Last of Us'],
+  'метроидвания': ['Hollow Knight: Silksong', 'Ori and the Will of the Wisps']
 };
 
-// 🟩 Дефолтные теги — показываются, если нет данных в userTags
 const defaultTags = [
   'стратегия',
   'экшен',
   'метроидвания',
-  'RPG',
-  'киберпанк',
-  'открытый мир',
-  'постапокалипсис',
   'PS Plus',
   '11 bit studios',
-  'Rockstar'
+  'Rockstar',
+  'открытый мир',
+  'технологии',
+  'постапокалипсис',
+  'RPG'
 ];
 
 export default function Sidebar() {
   const [recentlyViewed, setRecentlyViewed] = useState<RecentlyViewed[]>([]);
-  const [tagViews, setTagViews] = useState<TagViews>({});
+  const [userTags, setUserTags] = useState<UserTags>({});
 
-  // Загружаем данные из localStorage
   useEffect(() => {
-    try {
-      const savedViewed = localStorage.getItem('recentlyViewed');
-      if (savedViewed) setRecentlyViewed(JSON.parse(savedViewed));
+    const saved = localStorage.getItem('recentlyViewed');
+    if (saved) setRecentlyViewed(JSON.parse(saved));
 
-      const savedTags = localStorage.getItem('tagViews');
-      if (savedTags) {
-        setTagViews(JSON.parse(savedTags));
-      } else {
-        // Если нет сохраненных тегов, инициализируем дефолтные
-        const initialTags: TagViews = {};
-        defaultTags.forEach(tag => {
-          initialTags[tag] = 1;
-        });
-        setTagViews(initialTags);
-        localStorage.setItem('tagViews', JSON.stringify(initialTags));
-      }
-    } catch (e) {
-      console.error('Failed to load from localStorage', e);
-    }
+    const tags = localStorage.getItem('userTags');
+    if (tags) setUserTags(JSON.parse(tags));
   }, []);
 
-  // 🟩 Обновляем tagViews при изменении recentlyViewed
-  useEffect(() => {
-    try {
-      const tagCount: TagViews = {};
-      
-      // Подсчитываем теги из просмотренных новостей
-      recentlyViewed.forEach(item => {
-        if (item.tags && Array.isArray(item.tags)) {
-          item.tags.forEach(tag => {
-            tagCount[tag] = (tagCount[tag] || 0) + 1;
-          });
-        }
-      });
-
-      // Если нет тегов из просмотренных, используем дефолтные
-      if (Object.keys(tagCount).length === 0) {
-        defaultTags.forEach(tag => {
-          tagCount[tag] = 1;
-        });
-      }
-
-      setTagViews(tagCount);
-      localStorage.setItem('tagViews', JSON.stringify(tagCount));
-    } catch (e) {
-      console.error('Failed to update tag views', e);
-    }
-  }, [recentlyViewed]);
-
-  // 🟩 Определяем, какие теги показывать
-  const displayedTags = Object.keys(tagViews).length > 0
-    ? Object.keys(tagViews).sort((a, b) => tagViews[b] - tagViews[a]).slice(0, 8)
+  const displayedTags = Object.keys(userTags).length > 0
+    ? Object.keys(userTags).sort((a, b) => userTags[b] - userTags[a]).slice(0, 8)
     : defaultTags.slice(0, 8);
 
-  // Формируем рекомендации
   const recommended: string[] = [];
-  Object.keys(tagViews).forEach(tag => {
+  Object.keys(userTags).forEach(tag => {
     if (recommendations[tag] && recommended.length < 4) {
       recommendations[tag].slice(0, 2).forEach(title => {
-        if (recommended.length < 4 && !recommended.includes(title)) {
+        if (recommended.length < 4) {
           recommended.push(title);
         }
       });
     }
   });
 
-  // Обработчик клика по тегу
-  const handleTagClick = (tag: string) => {
-    try {
-      const newTagViews = { ...tagViews, [tag]: (tagViews[tag] || 0) + 1 };
-      setTagViews(newTagViews);
-      localStorage.setItem('tagViews', JSON.stringify(newTagViews));
-    } catch (e) {
-      console.error('Failed to update tag click', e);
-    }
-  };
-
   return (
     <aside className="space-y-6">
-      {/* ✅ 1. Популярные теги — теперь вверху и всегда видны */}
+      {/* === Популярные теги === */}
       <div className="card bg-bg-card rounded-2xl p-6 border border-border">
         <h4 className="text-lg font-semibold mb-4">🏷️ Популярные теги</h4>
         <div className="tags flex flex-wrap gap-2">
           {displayedTags.map(tag => (
             <span
               key={tag}
-              className="tag bg-purple-500/15 text-foreground px-3 py-1 rounded-full text-sm font-semibold border border-purple-500/30 cursor-pointer hover:scale-110 transition"
-              onClick={() => handleTagClick(tag)}
+              className="tag bg-purple-500/15 text-foreground px-3 py-1 rounded-full text-xs font-semibold border border-purple-500/30 cursor-pointer hover:scale-110 transition"
+              onClick={() => {
+                const newTags = { ...userTags, [tag]: (userTags[tag] || 0) + 1 };
+                setUserTags(newTags);
+                localStorage.setItem('userTags', JSON.stringify(newTags));
+              }}
             >
               {tag}
             </span>
@@ -134,7 +75,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* 2. Топ за неделю */}
+      {/* === 🔥 Топ за неделю === */}
       <div className="card bg-bg-card rounded-2xl p-6 border border-border">
         <h4 className="text-lg font-semibold mb-4">🔥 Топ за неделю</h4>
         <ul className="space-y-3">
@@ -156,7 +97,7 @@ export default function Sidebar() {
         </ul>
       </div>
 
-      {/* 3. Рекомендации от сайта */}
+      {/* === 🎯 Рекомендации от сайта === */}
       <div className="card bg-bg-card rounded-2xl p-6 border border-border">
         <h4 className="text-lg font-semibold mb-4">🎯 Рекомендации от сайта</h4>
         <ul className="space-y-3">
@@ -178,7 +119,7 @@ export default function Sidebar() {
         </ul>
       </div>
 
-      {/* 4. Новости от AI */}
+      {/* === 🤖 Новости от AI === */}
       <div className="card bg-bg-card rounded-2xl p-6 border border-border ai-block">
         <div className="ai-header flex items-center gap-2 mb-4">
           <span className="text-2xl">🤖</span>
@@ -195,43 +136,67 @@ export default function Sidebar() {
         </p>
       </div>
 
-      {/* 5. Вам может понравиться */}
+      {/* === 🎮 Раздачи игр Steam === */}
       <div className="card bg-bg-card rounded-2xl p-6 border border-border">
-        <h4 className="text-lg font-semibold mb-4">💡 Вам может понравиться</h4>
+        <h4 className="text-lg font-semibold mb-4">🎮 Раздачи игр Steam</h4>
         <ul className="space-y-3">
-          {recommended.length > 0 ? (
-            recommended.map((title, i) => (
-              <li key={i}>
-                <a href="#" className="text-muted-foreground hover:text-accent block transition">
-                  {title}
-                </a>
-              </li>
-            ))
-          ) : (
-            <li>
-              <a href="/news" className="text-muted-foreground hover:text-accent block transition">
-                Начните читать — мы подберём!
-              </a>
-            </li>
-          )}
+          <li>
+            <Link href="/steam/frostpunk-2" className="text-muted-foreground hover:text-accent block transition">
+              Frostpunk 2 — скидка 50%
+            </Link>
+          </li>
+          <li>
+            <Link href="/steam/gta-5" className="text-muted-foreground hover:text-accent block transition">
+              GTA 5 — бесплатно до конца недели
+            </Link>
+          </li>
+          <li>
+            <Link href="/steam/cyberpunk-2077" className="text-muted-foreground hover:text-accent block transition">
+              Cyberpunk 2077 — скидка 70%
+            </Link>
+          </li>
+          <li>
+            <Link href="/steam/hollow-knight" className="text-muted-foreground hover:text-accent block transition">
+              Hollow Knight — бесплатно для подписчиков
+            </Link>
+          </li>
+          <li>
+            <Link href="/steam/baldurs-gate-3" className="text-muted-foreground hover:text-accent block transition">
+              Baldur's Gate 3 — скидка 30%
+            </Link>
+          </li>
         </ul>
       </div>
 
-      {/* 6. Недавно просмотренные */}
+      {/* === 🎯 Раздачи игр Epic Games === */}
       <div className="card bg-bg-card rounded-2xl p-6 border border-border">
-        <h4 className="text-lg font-semibold mb-4">🕒 Недавно просмотренные</h4>
+        <h4 className="text-lg font-semibold mb-4">🎯 Раздачи игр Epic Games</h4>
         <ul className="space-y-3">
-          {recentlyViewed.length > 0 ? (
-            recentlyViewed.map((item, i) => (
-              <li key={i}>
-                <Link href={item.url} className="text-muted-foreground hover:text-accent block transition">
-                  {item.title}
-                </Link>
-              </li>
-            ))
-          ) : (
-            <li className="text-muted-foreground text-sm">Пока ничего не просмотрено</li>
-          )}
+          <li>
+            <Link href="/epic/far-cry-6" className="text-muted-foreground hover:text-accent block transition">
+              Far Cry 6 — бесплатно до 5 апреля
+            </Link>
+          </li>
+          <li>
+            <Link href="/epic/watch-dogs-legion" className="text-muted-foreground hover:text-accent block transition">
+              Watch Dogs: Legion — бесплатно до 12 апреля
+            </Link>
+          </li>
+          <li>
+            <Link href="/epic/assassins-creed-valhalla" className="text-muted-foreground hover:text-accent block transition">
+              Assassin's Creed Valhalla — скидка 60%
+            </Link>
+          </li>
+          <li>
+            <Link href="/epic/ghost-recon-breakpoint" className="text-muted-foreground hover:text-accent block transition">
+              Ghost Recon: Breakpoint — бесплатно до 19 апреля
+            </Link>
+          </li>
+          <li>
+            <Link href="/epic/the-division-2" className="text-muted-foreground hover:text-accent block transition">
+              The Division 2 — скидка 50%
+            </Link>
+          </li>
         </ul>
       </div>
     </aside>

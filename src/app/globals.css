@@ -195,7 +195,74 @@ footer {
   margin-top: 4rem;
 }
 
-/* === Мобильные стили === */
+/* === Стили для бургер-меню === */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+.mobile-menu .search-bar {
+  margin-bottom: 1rem;
+}
+
+.mobile-menu nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mobile-menu nav a {
+  display: block;
+  padding: 1rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu nav a:hover {
+  color: var(--accent);
+  background: rgba(168, 85, 247, 0.1);
+}
+
+/* === Адаптивность === */
+@media (max-width: 1024px) {
+  .news-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .news-img {
+    width: 100%;
+    max-width: 218px;
+    height: auto;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .lg\:col-span-2 {
+    grid-column: span 1;
+  }
+}
+
 @media (max-width: 768px) {
   .news-flex {
     flex-direction: column;
@@ -246,6 +313,11 @@ footer {
   .ai-header::before {
     font-size: 1rem;
   }
+
+  footer {
+    padding: 2rem 1rem;
+    font-size: 0.8rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -290,4 +362,95 @@ footer {
   .ai-header::before {
     font-size: 0.9rem;
   }
+
+  footer {
+    padding: 1.5rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  :root {
+  --bg: #1a1a1f;          /* Тёмный фон сайта */
+  --bg-card: #22222a;     /* Карточки */
+  --text: #e0e0e0;        /* Основной текст */
+  --text-muted: #a0a0b0;  /* Приглушённый текст */
+  --border: #333340;      /* Границы */
+}
+
+.light-theme {
+  --bg: #ffffff;          /* Светлый фон */
+  --bg-card: #f8f9fa;     /* Светлые карточки */
+  --text: #111827;        /* Текст */
+  --text-muted: #4b5563;  /* Приглушённый текст */
+  --border: #e5e7eb;      /* Границы */
+}
+
+
+.bg-bg {
+  background: var(--bg);
+}
+
+.bg-bg-card {
+  background: var(--bg-card);
+}
+
+.bg-text {
+  background: var(--text);
+}
+
+.bg-text-muted {
+  background: var(--text-muted);
+}
+
+.bg-accent {
+  background: var(--accent);
+}
+
+.bg-border {
+  background: var(--border);
+}
+
+/* === Текст === */
+.text-bg {
+  color: var(--bg);
+}
+
+.text-bg-card {
+  color: var(--bg-card);
+}
+
+.text-text {
+  color: var(--text);
+}
+
+.text-text-muted {
+  color: var(--text-muted);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.text-border {
+  color: var(--border);
+}
+
+/* === Границы === */
+.border-border {
+  border-color: var(--border);
+}
+
+/* === Тени === */
+.shadow-default {
+  box-shadow: var(--shadow);
+}
+
+.shadow-hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* === Градиенты === */
+.gradient-accent {
+  background: var(--gradient-accent);
+}
+
 }
