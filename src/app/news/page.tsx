@@ -18,6 +18,7 @@ export default function Home() {
     if (tags) setUserTags(JSON.parse(tags));
   }, []);
 
+  
   // 🔥 Добавляем новость про Cyberpunk 2077
   const cyberpunkNews = {
     id: 'cyberpunk-2077',
