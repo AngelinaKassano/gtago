@@ -17,8 +17,7 @@ export default function Header() {
     { href: '/ratings', label: 'Рейтинги' },
     { href: '/steam', label: 'Раздача Steam' },
     { href: '/epic', label: 'Раздача Epic' },
-    { href: '/advertising', label: 'Реклама' },
-    { href: '/support', label: 'Поддержать' },
+   
   ];
 
   return (
@@ -26,11 +25,19 @@ export default function Header() {
       {/* Логотип */}
       <Link 
         href="/" 
-        className="logo text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent cursor-pointer"
+        className="logo flex items-center gap-2 text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent cursor-pointer"
         onClick={() => setIsMenuOpen(false)}
       >
+        <img 
+          src="/logo.png" 
+          alt="GtaGo" 
+          width={40} 
+          height={40} 
+          className="object-contain"
+        />
         GtaGo
       </Link>
+
 
       {/* Навигация для десктопа */}
       <nav className="hidden md:flex space-x-6">
